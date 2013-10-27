@@ -100,17 +100,37 @@ public class Rational {
 	}
 	
 	private Rational reverse(){
-		long array[] = { -getNum(), getDen() };
-		return arrayReader( array );
+		return new Rational( -getNum(), getDen() );
 	}
 	
 	public Rational subtract( Rational r ){
 		return add( r.reverse() );
 	}
 	
+	public Rational multiply( Rational r ){
+		return new Rational( this.getNum()*r.getNum(), this.getDen()*r.getDen() );
+	}
+	
+	public Rational divide( Rational r ){
+		return multiply( r.inverse() );
+	}
+	
 	public Rational inverse(){
 		if( getNum() == 0 ){ return null;}
-		long array[] = { getDen(), getNum() };
-		return arrayReader( array );
+		return new Rational( getDen(), getNum() );
 	}
+	
+	public Rational power(int n){
+		return new Rational( (long)Math.pow(getNum(), n), (long)Math.pow(getDen(), n));
+	}
+	
+	public boolean greterThan( Rational r ){
+		return this.getNum()*r.getDen() - r.getNum()*this.getDen() > 0;
+	}
+	
+	public boolean lessThan( Rational r ){
+		return this.getNum()*r.getDen() - r.getNum()*this.getDen() < 0;
+	}
+	
+	
 }
