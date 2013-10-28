@@ -1,4 +1,4 @@
-package rational;
+package mytest;
 
 public class Rational {
 	private long num;
@@ -6,13 +6,14 @@ public class Rational {
 	public long getNum() {
 		return num;
 	}
-	private void setNum(long num) {
+	public void setNum(long num) {
 		this.num = num;
 	}
 	public long getDen() {
 		return den;
 	}
-	private void setDen(long den) {
+	public void setDen(long den) {
+		assert( den != 0 );
 		this.den = den;
 	}
 	Rational( long num, long den){
@@ -35,9 +36,9 @@ public class Rational {
 	private void reduce() {
 		long d = gcd(getNum(),getDen());
 		setNum(getNum()/d);
-		setNum(getDen()/d);
+		setDen(getDen()/d);
 	}
-	private long gcd(long a, long b) {
+	private static long gcd(long a, long b) {
 		if(b==0){
 			if( a < 0 ){
 				return a * -1;
@@ -47,7 +48,7 @@ public class Rational {
 		return gcd(b,a%b);
 	}
 	private void normalize() {
-		if( this.den < 0 ){
+		if( getDen() < 0 ){
 			setNum(getNum()*-1);
 			setDen(getDen()*-1);
 		}
@@ -78,8 +79,10 @@ public class Rational {
 		StringBuffer buf = new StringBuffer();
 		buf.append(isNegative()?"-":"");
 		buf.append(Math.abs(getNum()));
-		buf.append("/");
-		buf.append(getDen());
+		if( getDen() != 1 ){
+			buf.append("/");
+			buf.append(getDen());
+		}
 		return buf.toString();
 	}
 	
@@ -112,6 +115,9 @@ public class Rational {
 	}
 	
 	public Rational divide( Rational r ){
+		if( r.inverse() == null){
+			return null;
+		}
 		return multiply( r.inverse() );
 	}
 	
@@ -121,10 +127,16 @@ public class Rational {
 	}
 	
 	public Rational power(int n){
-		return new Rational( (long)Math.pow(getNum(), n), (long)Math.pow(getDen(), n));
+		if( n >= 0 ){
+			return new Rational( (long)Math.pow(getNum(), n), (long)Math.pow(getDen(), n));
+		}
+		else{
+			Rational r = new Rational( (long)Math.pow(getNum(), -n), (long)Math.pow(getDen(), -n));
+			return r.inverse();
+		}
 	}
 	
-	public boolean greterThan( Rational r ){
+	public boolean greaterThan( Rational r ){
 		return this.getNum()*r.getDen() - r.getNum()*this.getDen() > 0;
 	}
 	
