@@ -64,9 +64,10 @@ public class Rational {
 		}catch(ClassCastException e ){}
 		return false;
 	}
-	
+
 	@Override
 	public Object clone(){
+		// deep copy
 		return new Rational( getNum(), getDen() );
 	}
 	
